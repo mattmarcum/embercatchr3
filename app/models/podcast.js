@@ -8,7 +8,6 @@ const {
 } = DS;
 
 export default Model.extend({
-  feed: Ember.inject.service(),
 
   title: attr('string'),
   link: attr('string'),
@@ -40,6 +39,7 @@ export default Model.extend({
 
   updatePods(podcast) {
     let promises = podcast.entries
+      .slice(0,10)
       .filter(pod => this.filterPod(pod))
       .map(pod => this.addPod(pod));
 
@@ -55,13 +55,14 @@ export default Model.extend({
     ){
       return false;
     }
+    return true;
     return !this.get('pods').filterBy('enclosure.url', pod.enclosure.url).length;
   },
 
   addPod(pod) {
     pod.publishedDate = new Date(pod.publishedDate);
+    pod.podcast = this;
     let podRecord = this.store.createRecord('pod', pod);
-    this.get('pods').pushObject(podRecord);
     return podRecord.save();
   }
 });

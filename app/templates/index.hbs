@@ -1,5 +1,5 @@
-<ul>
-{{#each model as |pod|}}
-<li>{{pod-card pod=pod}}</li>
-{{/each}}
-</ul>
+{{#paper-list}}
+  {{#each model as |pod|}}
+    {{pod-card pod=pod}}
+  {{/each}}
+{{/paper-list}}

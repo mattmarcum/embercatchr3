@@ -1,0 +1,15 @@
+@import 'ember-paper';
+
+.pod-description {
+  height: 1.5em;
+  width: 90%;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.md-toolbar-tools {
+  justify-content: space-between;
+}
+.md-list-item-text h2 {
+  margin-top: 0;
+}

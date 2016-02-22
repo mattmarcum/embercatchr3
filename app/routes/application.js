@@ -4,7 +4,7 @@ export default Ember.Route.extend({
   store: Ember.inject.service(),
   model() {
     return this.store.findAll('podcast').then(podcasts => {
-      let promise = Ember.RSVP.resolve();
+      let promise = Ember.RSVP.resolve('application:model');
 
       if(!podcasts.get('length')){
         let records = [
@@ -16,7 +16,9 @@ export default Ember.Route.extend({
         ];
 
         podcasts = records.map(record => this.get('store').createRecord('podcast', record));
-        promise.then(() => Ember.RSVP.all(podcasts.invoke('update')));
+        promise = promise
+        .then(() => Ember.RSVP.all(podcasts.invoke('save')))
+        .then(() => Ember.RSVP.all(podcasts.invoke('update')));
       }
 
       return promise
@@ -24,5 +26,13 @@ export default Ember.Route.extend({
         .then(pods => pods.sortBy('publishedDate').reverse().slice(0, 20));
 
     });
+  },
+  actions: {
+    gotoPod(pod) {
+      debugger;
+    },
+    downloadPod(pod) {
+      debugger;
+    }
   }
 });

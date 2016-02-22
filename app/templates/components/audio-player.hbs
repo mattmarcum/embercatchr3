@@ -1,1 +1,8 @@
-{{yield}}
+<audio id="audio-player" src={{src}}></audio>
+{{title}}:
+{{#paper-button param=pod action="play" raised=true primary=true}}
+  {{paper-icon "play-arrow"}}
+{{/paper-button}}
+{{#paper-button param=pod action="pause" raised=true primary=true}}
+  {{paper-icon "pause"}}
+{{/paper-button}}
