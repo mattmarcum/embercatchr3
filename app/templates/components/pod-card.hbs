@@ -1,17 +1,21 @@
-{{#paper-item class="md-3-line" param=pod action="gotoPod"}}
+{{#paper-item class="md-3-line"}}
   <img src={{pod.avatar}} class="md-avatar">
   <div class="md-list-item-text">
     <h2>{{{pod.podcast.title}}} - {{{pod.title}}}</h2>
     <h3>{{{pod.publishedDate}}}</h3>
     <p class="pod-description">{{{pod.shortDescription}}}</p>
   </div>
-  {{#unless pod.isDownloaded}}
-    {{#if pod.isDownloading}}
-      {{paper-progress-circular}}
+  <div class="md-list-item-right">
+    {{#unless pod.isDownloaded}}
+      {{#if pod.isDownloading}}
+        {{paper-progress-circular}}
+      {{else}}
+        {{#paper-button param=pod action="downloadAudio" raised=true primary=true }}Download{{/paper-button}}
+      {{/if}}
     {{else}}
-      {{#paper-button param=pod action="downloadPod" raised=true primary=true}}Download{{/paper-button}}
-    {{/if}}
-  {{/unless}}
-  {{#paper-button param=pod action="playPod" raised=true primary=true}}Play{{/paper-button}}
+        {{#paper-button param=pod action="deleteAudio" raised=true primary=true }}Delete Audio{{/paper-button}}
+    {{/unless}}
+    {{#paper-button param=pod action="playPod" raised=true primary=true}}Play{{/paper-button}}
+  </div>
 {{/paper-item}}
 {{paper-divider inset=true}}

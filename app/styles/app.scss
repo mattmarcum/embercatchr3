@@ -10,6 +10,23 @@
 .md-toolbar-tools {
   justify-content: space-between;
 }
+.md-list-item-text {
+  flex-grow: 1;
+}
+.md-list-item-right {
+  @extend .md-list-item-text;
+  align-self: flex-end;
+  flex-grow: unset !important;
+  flex-shrink: 1;
+  text-align: right;
+}
 .md-list-item-text h2 {
   margin-top: 0;
+}
+
+.loading-spinner {
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 30vh;
+  width: 100px;
 }

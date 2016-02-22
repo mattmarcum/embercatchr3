@@ -6,8 +6,11 @@ export default Ember.Component.extend({
   classNames: ['pod-card'],
 
   actions: {
-    downloadPod(pod) {
+    downloadAudio(pod) {
       pod.download();
+    },
+    deleteAudio(pod) {
+      pod.deleteAudio();
     },
     playPod(pod) {
       pod.download().then(()=>{

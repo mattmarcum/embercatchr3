@@ -30,9 +30,9 @@ export default Model.extend({
   hasListened: attr('boolean'),
   isDownloaded: attr('boolean'),
   position: attr('number'),
-  attachements: attr('attachement'),
+  attachments: attr('attachment'),
 
-  audioFile: Ember.computed.alias('attachements.firstObject.data'),
+  audioFile: Ember.computed.alias('attachments.firstObject.data'),
   audioUrl: Ember.computed('audioFile', function() {
     let audioFile = this.get('audioFile');
     if(audioFile){
@@ -41,7 +41,7 @@ export default Model.extend({
     return false;
   }),
 
-  audioType: Ember.computed.alias('attachements.firstObject.content-type'),
+  audioType: Ember.computed.alias('attachments.firstObject.content-type'),
 
   isDownloading: false,
 
@@ -55,7 +55,7 @@ export default Model.extend({
     return window.fetch(`/api/audio?url=${this.get('enclosure.url')}`)
     .then( response => response.blob() )
     .then( file => {
-      let attachements = this.get('attachements') || this.set('attachements', Ember.A());
+      let attachements = this.get('attachments') || this.set('attachments', Ember.A());
 
       attachements.addObject(Ember.Object.create({
         'name': this.get('enclosure.url'),
@@ -63,9 +63,22 @@ export default Model.extend({
         'data': file
       }))
 
-      this.set('isDownloading', false);
+      this.set('isDownloading', false)
       this.set('isDownloaded', true);
       return this.save();
     })
+    .catch( () =>{
+      this.set('isDownloading', false)
+    })
+  },
+  deleteAudio() {
+    if(!this.get('audioFile')){
+      return;
+    }
+    this.setProperties({
+      attachments: Ember.A(),
+      isDownloaded: false,
+    });
+    this.save();
   }
 });
