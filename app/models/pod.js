@@ -8,6 +8,8 @@ const {
 } = DS;
 
 export default Model.extend({
+  podcast: belongsTo('podcast'),
+  
   link: attr('string'),
   title: attr('string'),
   description: attr('string'),
@@ -22,7 +24,6 @@ export default Model.extend({
   audioFile: attr('attachement'),
 
   download() {
-debugger;
     window.fetch(`/api/audio?url=${this.get('enclosure.url')}`)
     .then( response => response.blob() )
     .then( file => {

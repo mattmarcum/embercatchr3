@@ -40,18 +40,26 @@ export default Model.extend({
 
   updatePods(podcast) {
     let promises = podcast.entries
-      .filter(pod => this.hasPod(pod))
+      .filter(pod => this.filterPod(pod))
       .map(pod => this.addPod(pod));
 
     return Ember.RSVP.all(promises);
   },
 
-  hasPod(pod) {
-    if(! pod.enclosure || !pod.enclosure.url){ return true; }
-    return this.get('pods').filterBy('enclosure.url', pod.enclosure.url);
+  filterPod(pod) {
+    if( typeof pod !== 'object' ||
+      ! pod.enclosure ||
+      ! pod.enclosure.url ||
+      ! pod.publishedDate ||
+      ! pod.title
+    ){
+      return false;
+    }
+    return !this.get('pods').filterBy('enclosure.url', pod.enclosure.url).length;
   },
 
   addPod(pod) {
+    pod.publishedDate = new Date(pod.publishedDate);
     let podRecord = this.store.createRecord('pod', pod);
     this.get('pods').pushObject(podRecord);
     return podRecord.save();

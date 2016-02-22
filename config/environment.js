@@ -19,6 +19,10 @@ module.exports = function(environment) {
     },
     emberPouch: {
       localDb: 'embercatch3'
+    },
+    serviceWorker: {
+      enabled: true,
+      debug: true
     }
   };
 
