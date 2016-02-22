@@ -1,0 +1,7 @@
+  - package up feed-reader as podcast-reader
+  - create podcast, pod models
+  - create feed service
+  - implement application model hook to add podcasts if none exist
+  - index route
+    - pod-card
+    - audio-player
