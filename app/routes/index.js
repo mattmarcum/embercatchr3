@@ -6,7 +6,7 @@ export default Ember.Route.extend({
     return this.store.findAll('podcast').then(podcasts => {
       let promise = Ember.RSVP.resolve('application:model');
 
-      if(!podcasts.get('length')){
+      if (!podcasts.get('length')) {
         let records = [
           { link: 'https://emberweekend.com/feed.xml'},
           { link: 'http://ember.land/?format=rss'},
@@ -17,13 +17,12 @@ export default Ember.Route.extend({
 
         podcasts = records.map(record => this.get('store').createRecord('podcast', record));
         promise = promise
-        .then(() => Ember.RSVP.all(podcasts.invoke('save')))
-        .then(() => Ember.RSVP.all(podcasts.invoke('update')));
+        .then(() => Ember.RSVP.all(podcasts.invoke('save')));
       }
 
       return promise
         .then(() => this.store.findAll('pod'))
-        .then(pods => pods.sortBy('publishedDate').reverse().slice(0, 20));
+        .then(pods => pods.sortBy('publishedDate').reverse().slice(0, 20))
 
     });
   }
