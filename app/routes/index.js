@@ -22,8 +22,6 @@ export default Ember.Route.extend({
 
       return promise
         .then(() => this.store.findAll('pod'))
-        .then(pods => pods.sortBy('publishedDate').reverse().slice(0, 20))
-
     });
   }
 });
