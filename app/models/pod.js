@@ -1,6 +1,8 @@
 import Model from 'ember-pouch/model';
 import DS from 'ember-data';
 import Ember from 'ember';
+import fetch from "ember-network/fetch";
+
 const {
   attr,
   hasMany,
@@ -23,9 +25,7 @@ export default Model.extend(AttachmentSupport, {
   isDownloaded: attr('boolean'),
   position: attr('number'),
 
-  avatar: Ember.computed('image', 'podcast.image', function() {
-    return this.get('image') || this.get('podcast.image');
-  }),
+  avatar: Ember.computed.alias('podcast.image'),
 
   shortDescription: Ember.computed('description', function() {
     return this.get('description').replace(/(<([^>]+)>)/ig,"");
@@ -53,7 +53,7 @@ export default Model.extend(AttachmentSupport, {
     }
 
     this.set('isDownloading', true);
-    return window.fetch(`/api/audio?url=${this.get('enclosure.url')}`)
+    return fetch(`/api/audio?url=${this.get('enclosure.url')}`)
     .then( response => response.blob() )
     .then( file => {
       let attachments = this.get('attachments') || this.set('attachments', Ember.A());

@@ -1,7 +1,6 @@
 import Ember from 'ember';
 
 export default Ember.Route.extend({
-  store: Ember.inject.service(),
   model() {
     return this.store.findAll('podcast').then(podcasts => {
       let promise = Ember.RSVP.resolve('application:model');
@@ -21,9 +20,7 @@ export default Ember.Route.extend({
       }
 
       return promise
-        .then(() => this.store.findAll('pod'))
-        .then(pods => pods.sortBy('publishedDate').reverse().slice(0, 20))
-
+        .then(() => this.store.findAll('pod'));
     });
   }
 });

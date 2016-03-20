@@ -2,8 +2,8 @@
   <div class="md-toolbar-tools">
     <p>EmberCatchr</p>
     {{audio-player}}
-    {{#async-paper-button action=(action "getLatestPods") as |animating|}}
-      {{paper-icon "sync" spin=animating}}
+    {{#async-paper-button task=getLatestPods as |animating|}}
+      {{paper-icon "sync" reverseSpin=animating}}
     {{/async-paper-button}}
   </div>
 {{/paper-toolbar}}
