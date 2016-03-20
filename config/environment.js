@@ -21,8 +21,8 @@ module.exports = function(environment) {
       localDb: 'embercatchr3'
     },
     serviceWorker: {
-      enabled: true,
-      includeRegistration: true,
+      enabled: false,
+      includeRegistration: false,
       debug: true
     }
   };

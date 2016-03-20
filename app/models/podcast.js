@@ -1,6 +1,8 @@
 import Model from 'ember-pouch/model';
 import DS from 'ember-data';
 import Ember from 'ember';
+import fetch from "ember-network/fetch";
+
 const {
   attr,
   hasMany,
@@ -18,14 +20,14 @@ export default Model.extend({
   pods: hasMany('pod'),
 
   update() {
-    return window.fetch(`/api/feed?url=${this.get('link')}`)
+    return fetch(`/api/feed?url=${this.get('link')}`)
       .then(response => response.json())
-      .then(podcast => this.updateAttrs(podcast))
-      .then(podcast => this.updatePods(podcast))
+      .then(podcast => this._updateAttrs(podcast))
+      .then(podcast => this._updatePods(podcast))
       .then(() => this.save());
   },
 
-  updateAttrs(podcast) {
+  _updateAttrs(podcast) {
     this.setProperties({
       title: podcast.title,
       link: podcast.link,
@@ -37,16 +39,15 @@ export default Model.extend({
     return podcast;
   },
 
-  updatePods(podcast) {
+  _updatePods(podcast) {
     let promises = podcast.entries
-      .slice(0,10)
-      .filter(pod => this.filterPod(pod))
-      .map(pod => this.addPod(pod));
+      .filter(pod => this._filterPod(pod))
+      .map(pod => this._addPod(pod));
 
     return Ember.RSVP.all(promises);
   },
 
-  filterPod(pod) {
+  _filterPod(pod) {
     if( typeof pod !== 'object' ||
       ! pod.enclosure ||
       ! pod.enclosure.url ||
@@ -55,14 +56,13 @@ export default Model.extend({
     ){
       return false;
     }
-    return true;
     return !this.get('pods').filterBy('enclosure.url', pod.enclosure.url).length;
   },
 
-  addPod(pod) {
+  _addPod(pod) {
     pod.publishedDate = new Date(pod.publishedDate);
-    pod.podcast = this;
     let podRecord = this.store.createRecord('pod', pod);
+    this.get('pods').pushObject(podRecord);
     return podRecord.save();
   }
 });

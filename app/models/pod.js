@@ -1,13 +1,16 @@
 import Model from 'ember-pouch/model';
 import DS from 'ember-data';
 import Ember from 'ember';
+import fetch from "ember-network/fetch";
+
 const {
   attr,
   hasMany,
   belongsTo
 } = DS;
+import AttachmentSupport from '../mixins/attachment-support';
 
-export default Model.extend({
+export default Model.extend(AttachmentSupport, {
   podcast: belongsTo('podcast'),
 
   link: attr('string'),
@@ -18,27 +21,25 @@ export default Model.extend({
   content: attr('string'),
   enclosure: attr(),
   image: attr('string'),
+  hasListened: attr('boolean'),
+  isDownloaded: attr('boolean'),
+  position: attr('number'),
 
-  avatar: Ember.computed('image', 'podcast.image', function() {
-    return this.get('image') || this.get('podcast.image');
-  }),
+  avatar: Ember.computed.alias('podcast.image'),
 
   shortDescription: Ember.computed('description', function() {
     return this.get('description').replace(/(<([^>]+)>)/ig,"");
   }),
 
-  hasListened: attr('boolean'),
-  isDownloaded: attr('boolean'),
-  position: attr('number'),
-  attachments: attr('attachment'),
-
   audioFile: Ember.computed.alias('attachments.firstObject.data'),
   audioUrl: Ember.computed('audioFile', function() {
     let audioFile = this.get('audioFile');
-    if(audioFile){
+
+    if (audioFile) {
       return URL.createObjectURL(audioFile);
     }
-    return false;
+
+    return this.get('enclosure.url');
   }),
 
   audioType: Ember.computed.alias('attachments.firstObject.content-type'),
@@ -52,25 +53,29 @@ export default Model.extend({
     }
 
     this.set('isDownloading', true);
-    return window.fetch(`/api/audio?url=${this.get('enclosure.url')}`)
+    return fetch(`/api/audio?url=${this.get('enclosure.url')}`)
     .then( response => response.blob() )
     .then( file => {
-      let attachements = this.get('attachments') || this.set('attachments', Ember.A());
+      let attachments = this.get('attachments') || this.set('attachments', Ember.A());
 
-      attachements.addObject(Ember.Object.create({
-        'name': this.get('enclosure.url'),
-        'content-type': file.type,
-        'data': file
+      attachments.addObject(Ember.Object.create({
+        name: this.get('enclosure.url'),
+        content_type: file.type,
+        data: file
       }))
 
-      this.set('isDownloading', false)
-      this.set('isDownloaded', true);
+      this.setProperties({
+        isDownloading: false,
+        isDownloaded: true
+      });
+
       return this.save();
     })
     .catch( () =>{
       this.set('isDownloading', false)
     })
   },
+
   deleteAudio() {
     if(!this.get('audioFile')){
       return;
@@ -81,4 +86,5 @@ export default Model.extend({
     });
     this.save();
   }
+
 });

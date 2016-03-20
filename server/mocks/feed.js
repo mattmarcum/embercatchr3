@@ -11,7 +11,7 @@ module.exports = function(app) {
     let url = req.query.url;
 
     try {
-    parser.parse(url).then((feed)=>{
+    parser.parse(url).then(feed => {
       res.send(feed);
     })
     .catch(err => {
