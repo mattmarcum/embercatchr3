@@ -9,7 +9,7 @@
     {{#unless pod.isDownloaded}}
       {{#if pod.isDownloading}}
         <div class="loading-linear">
-        {{paper-progress-linear value=pod.downloadPercentage}}
+          {{paper-progress-linear mode=pod.downloadMode value=pod.downloadPercentage}}
         </div>
       {{else}}
         {{#paper-button param=pod action=(perform pod.download) raised=true primary=true }}Save{{/paper-button}}

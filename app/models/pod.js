@@ -54,15 +54,16 @@ export default Model.extend(AttachmentSupport, {
   isDownloading: Ember.computed.alias('download.isRunning'),
 
   downloadPercentage: 0,
+  downloadMode: 'determinate',
 
-  download: task(function * (onChunkCallBack){
+  download: task(function * (){
     if(this.get('isDownloaded')){
       let audioFile = yield this.get('audioFile').perform();
       return audioFile;
     }
 
     /**
-    *We will use window.fetch in the browser to get the latests features
+    *We will use window.fetch in the browser to try and get the latest features
     **/
     let fetch = fetch;
     if(window && fetch in window){
@@ -73,7 +74,7 @@ export default Model.extend(AttachmentSupport, {
     let progressResponse = response.clone();
     let responses = yield all([
       response.blob(),
-      this.get('updateDownloadPercentage').perform(progressResponse, onChunkCallBack)
+      this.get('updateDownloadPercentage').perform(progressResponse)
     ]);
 
     let file = responses[0];
@@ -90,53 +91,25 @@ export default Model.extend(AttachmentSupport, {
     return this.get('audioFile').perform();
   }).drop(),
 
-  updateDownloadPercentage: task(function * (response, onChunkCallBack) {
-
+  updateDownloadPercentage: task(function * (response) {
     try {
       let reader = response.body.getReader();
       if(reader) {
         let headers = response.headers;
         let contentLength = parseInt(headers.get('content-length'));
-        let contentType = headers.get('content-type');
-        let streamBuffer = new Uint8Array(contentLength);
         let currentPos = 0;
-        // let bufferLength = 1024*1024;
-        // let frameStart = 0;
-        // let frameEnd;
 
         let result = yield reader.read();
         while(!result.done){
-          streamBuffer.set(result.value, currentPos);
           currentPos += result.value.length;
           this.set('downloadPercentage', Math.ceil((currentPos / contentLength)*100) );
-
-          // if(currentPos - frameStart > bufferLength){
-          //   let offset = streamBuffer.lastIndexOf(255);
-          //   if(streamBuffer[offset+1] >= 250) {
-          //     frameEnd = offset - 1;
-          //     onChunkCallBack(streamBuffer.slice(frameStart, frameEnd), contentType);
-          //     frameStart = offset;
-          //   }
-          // }
-
           result = yield reader.read();
         }
       }
     } catch(e) {
       console.log('err:',e);
-      let percent = 0;
-      while(true) {
-          //fake it till you make it
-          this.set('downloadPercentage', Math.ceil(percent += 10) );
-
-          yield timeout(500);
-
-          if(percent === 100){
-            return;
-          }
-      }
+      this.set('downloadMode', 'indeterminate');
     }
-
   }),
 
   deleteAudio() {
