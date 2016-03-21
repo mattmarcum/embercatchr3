@@ -20,10 +20,13 @@ export default Ember.Route.extend({
         .then(() => Ember.RSVP.all(podcasts.invoke('save')));
       }
 
-      this.controllerFor('application').send('getLatestPods');
-
       return promise
         .then(() => this.store.findAll('pod'));
     });
+  },
+
+  setupController() {
+    this._super(...arguments);
+    this.controllerFor('application').send('getLatestPods');
   }
 });
