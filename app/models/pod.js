@@ -6,7 +6,6 @@ import { task, all, timeout } from 'ember-concurrency';
 
 const {
   attr,
-  hasMany,
   belongsTo
 } = DS;
 import AttachmentSupport from '../mixins/attachment-support';
