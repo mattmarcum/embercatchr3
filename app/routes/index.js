@@ -16,7 +16,8 @@ export default Ember.Route.extend({
 
         podcasts = records.map(record => this.get('store').createRecord('podcast', record));
         promise = promise
-        .then(() => Ember.RSVP.all(podcasts.invoke('save')));
+        .then(() => Ember.RSVP.all(podcasts.invoke('save')))
+        .then(()=> this.controllerFor('application').get('getLatestPods').perform())
       }
 
       return promise

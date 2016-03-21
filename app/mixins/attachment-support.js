@@ -15,17 +15,18 @@ export default Ember.Mixin.create({
           data,
           stub: false
         });
-        return data;
       });
   },
 
-  retrieveAttachments: Ember.on('didLoad', function() {
+  retrieveAttachments() {
     let attachments = this.get('attachments');
 
     if (Ember.isNone(attachments)){ return; }
 
     attachments.forEach(attachment => {
-      this.retrieveAttachement(attachment.name);
+      if(attachment.stub){
+        this.retrieveAttachement(attachment.name);
+      }
     });
-  })
+  }
 });
