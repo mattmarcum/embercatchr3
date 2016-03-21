@@ -17,7 +17,7 @@ export default Ember.Component.extend({
     if(currentPod){
       Ember.run.next(this, function() {
         this.$('audio')[0].play();
-      })
+      });
     }
   }),
 

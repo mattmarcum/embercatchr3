@@ -5,8 +5,7 @@ import fetch from "ember-network/fetch";
 
 const {
   attr,
-  hasMany,
-  belongsTo
+  hasMany
 } = DS;
 
 export default Model.extend({

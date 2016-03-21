@@ -5,7 +5,6 @@ import fetch from "ember-network/fetch";
 
 const {
   attr,
-  hasMany,
   belongsTo
 } = DS;
 import AttachmentSupport from '../mixins/attachment-support';
@@ -62,7 +61,7 @@ export default Model.extend(AttachmentSupport, {
         name: this.get('enclosure.url'),
         content_type: file.type,
         data: file
-      }))
+      }));
 
       this.setProperties({
         isDownloading: false,
@@ -72,8 +71,8 @@ export default Model.extend(AttachmentSupport, {
       return this.save();
     })
     .catch( () =>{
-      this.set('isDownloading', false)
-    })
+      this.set('isDownloading', false);
+    });
   },
 
   deleteAudio() {
