@@ -26,6 +26,6 @@ export default Ember.Route.extend({
 
   setupController() {
     this._super(...arguments);
-    this.controllerFor('application').send('getLatestPods');
+    this.controllerFor('application').get('getLatestPods').perform();
   }
 });
