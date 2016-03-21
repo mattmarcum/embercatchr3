@@ -22,5 +22,10 @@ export default Ember.Route.extend({
       return promise
         .then(() => this.store.findAll('pod'));
     });
+  },
+
+  setupController() {
+    this._super(...arguments);
+    this.controllerFor('application').send('getLatestPods');
   }
 });
