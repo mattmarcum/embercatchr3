@@ -40,7 +40,7 @@ export default Model.extend({
   },
 
   _updatePods(podcast) {
-    let promises = podcast.entries
+    let promises = podcast.entries.slice(0,5)
       .filter(pod => this._filterPod(pod))
       .map(pod => this._addPod(pod));
 

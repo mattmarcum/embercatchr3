@@ -8,9 +8,11 @@
   <div class="md-list-item-right">
     {{#unless pod.isDownloaded}}
       {{#if pod.isDownloading}}
-        {{paper-progress-circular}}
+        <div class="loading-linear">
+        {{paper-progress-linear value=pod.downloadPercentage}}
+        </div>
       {{else}}
-        {{#paper-button param=pod action="downloadAudio" raised=true primary=true }}Download{{/paper-button}}
+        {{#paper-button param=pod action=(perform pod.download) raised=true primary=true }}Save{{/paper-button}}
       {{/if}}
     {{else}}
         {{#paper-button param=pod action="deleteAudio" raised=true primary=true }}Delete Audio{{/paper-button}}

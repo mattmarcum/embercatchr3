@@ -10,23 +10,12 @@ export default Ember.Component.extend({
     return this.get('currentPod.title') || 'No Podcast is Loaded';
   }),
 
-  src: Ember.computed.alias('currentPod.audioUrl'),
-
-  playOnChange: Ember.observer('currentPod', function(){
-    let currentPod = this.get('currentPod');
-    if(currentPod){
-      Ember.run.next(this, function() {
-        this.$('audio')[0].play();
-      })
-    }
-  }),
-
   actions: {
     play() {
-      this.$('audio')[0].play();
+      this.get('audioPlayer').play();
     },
     pause() {
-      this.$('audio')[0].pause();
+      this.get('audioPlayer').pause();
     }
   }
 });
