@@ -1,10 +1,27 @@
 @import 'ember-paper';
 
+.breadcrumb {
+  list-style: none;
+}
+.breadcrumb li {
+  display: inline-block;
+  &:after {
+    content: '|';
+  }
+  &:last-of-type:after {
+    content: '';
+  }
+}
+.breadcrumb li a {
+  text-decoration: none;
+}
 .pod-description {
-  height: 1.5em;
   width: 90%;
   text-overflow: ellipsis;
   overflow: hidden;
+}
+.pod-description.short {
+  height: 1.5em;
 }
 
 .md-toolbar-tools {

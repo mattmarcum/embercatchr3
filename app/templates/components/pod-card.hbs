@@ -1,9 +1,15 @@
-{{#paper-item class="md-3-line"}}
+{{#paper-item class="md-3-line" action=onClick param=pod}}
   <img src={{pod.avatar}} class="md-avatar">
   <div class="md-list-item-text">
     <h2>{{{pod.podcast.title}}} - {{{pod.title}}}</h2>
     <h3>{{{pod.publishedDate}}}</h3>
-    <p class="pod-description">{{{pod.shortDescription}}}</p>
+    <p class="pod-description {{description}}">
+      {{#if (eq description "short")}}
+        {{{pod.shortDescription}}}
+      {{else}}
+        {{{pod.description}}}
+      {{/if}}
+    </p>
   </div>
   <div class="md-list-item-right">
     {{#unless pod.isDownloaded}}

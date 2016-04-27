@@ -1,6 +1,6 @@
 import Ember from 'ember';
 
-export default Ember.Component.extend({
+let podCard = Ember.Component.extend({
   audioPlayer: Ember.inject.service(),
 
   classNames: ['pod-card'],
@@ -14,3 +14,10 @@ export default Ember.Component.extend({
     }
   }
 });
+
+podCard.reopenClass({
+  positionalParams: ['pod', 'description']
+});
+
+
+export default podCard;

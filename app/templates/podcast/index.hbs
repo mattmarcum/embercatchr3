@@ -1,5 +1,5 @@
 {{#paper-list}}
-  {{#each sortedPods as |pod|}}
+  {{#each model.pods as |pod|}}
     {{pod-card pod "short" onClick=(route-action "transitionToPod")}}
   {{/each}}
 {{/paper-list}}
